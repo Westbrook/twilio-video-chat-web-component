@@ -14,8 +14,9 @@
   "author": "Phil Nash <philnash@twilio.com>",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^2.0.0",
-    "express": "^4.13.4",
-    "twilio": "^2.9.1"
+    "dotenv": "^4.0.0",
+    "express": "^4.15.2",
+    "twilio": "^3.0.0",
+    "twilio-video": "^1.0.0"
   }
 }

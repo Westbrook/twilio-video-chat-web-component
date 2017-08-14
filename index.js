@@ -1,9 +1,10 @@
 require('dotenv').load();
 
+var http = require("http");
 var express = require("express");
 var twilio = require("twilio");
-var AccessToken = twilio.AccessToken;
-var ConversationsGrant = AccessToken.ConversationsGrant;
+var AccessToken = twilio.jwt.AccessToken;
+var VideoGrant = AccessToken.VideoGrant;
 
 var app = express();
 
@@ -15,18 +16,23 @@ app.get("/", function(req, res) {
 });
 
 app.get("/token", function(req, res) {
-  res.set('Content-Type', 'application/json');
+  // Create an access token which we will sign and return to the client,
+  // containing the grant we just created.
   var token = new AccessToken(
     process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_API_KEY,
     process.env.TWILIO_API_SECRET
   );
   if (req.query.identity) {
-    token.identity = req.query.identity;
-    var grant = new ConversationsGrant();
-    grant.configurationProfileSid = process.env.TWILIO_CONFIGURATION_SID;
+    var identity = token.identity = req.query.identity;
+
+    // Grant the access token Twilio Video capabilities.
+    var grant = new VideoGrant();
     token.addGrant(grant);
+
+    // Serialize the token to a JWT string and include it in a JSON response.
     res.send({
+      identity: identity,
       token: token.toJwt()
     });
   } else {
@@ -34,7 +40,8 @@ app.get("/token", function(req, res) {
   }
 });
 
+var server = http.createServer(app);
 var port = process.env.PORT || 3000;
-app.listen(port, function() {
+server.listen(port, function() {
   console.log("Your app is listening on localhost:" + port);
 });
