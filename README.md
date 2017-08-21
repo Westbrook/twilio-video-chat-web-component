@@ -31,12 +31,12 @@ Then edit that `.env` file and add the credentials you have collected.
 
 Install the dependencies for this project from npm:
 
-    $ npm install
+    $ yarn install
 
 ### Start the application
 
 Start the Node.js application:
 
-    $ node index.js
+    $ yarn start
 
 Open the application at [http://localhost:3000](http://localhost:3000).

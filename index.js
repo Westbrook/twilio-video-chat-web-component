@@ -16,6 +16,7 @@ app.get("/", function(req, res) {
 });
 
 app.get("/token", function(req, res) {
+  res.set('Content-Type', 'application/json');
   // Create an access token which we will sign and return to the client,
   // containing the grant we just created.
   var token = new AccessToken(
@@ -41,7 +42,7 @@ app.get("/token", function(req, res) {
 });
 
 var server = http.createServer(app);
-var port = process.env.PORT || 3030;
+var port = process.env.PORT || 3000;
 app.listen(port, 'localhost', function() {
   console.log("Your app is listening on localhost:" + port);
 });
