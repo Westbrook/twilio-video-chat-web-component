@@ -41,7 +41,7 @@ app.get("/token", function(req, res) {
 });
 
 var server = http.createServer(app);
-var port = process.env.PORT || 3000;
-server.listen(port, function() {
+var port = process.env.PORT || 3030;
+app.listen(port, 'localhost', function() {
   console.log("Your app is listening on localhost:" + port);
 });

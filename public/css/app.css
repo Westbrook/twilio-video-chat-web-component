@@ -110,7 +110,7 @@ body {
  */
 
 .cover {
-  padding: 0 20px;
+  padding: 0;
 }
 .cover .btn-lg {
   padding: 10px 20px;
@@ -160,4 +160,8 @@ body {
   .cover-container {
     width: 700px;
   }
+}
+
+twilio-video {
+  padding-bottom: 75%;
 }
