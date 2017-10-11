@@ -120,7 +120,7 @@ class TwilioVideoPrototype extends HTMLElement {
     var importDoc = document.currentScript.ownerDocument;
     var template = importDoc.getElementById('twilio-video-template');
     var clone = importDoc.importNode(template.content, true);
-    var shadowRoot = this.createShadowRoot();
+    var shadowRoot = this.attachShadow({mode: 'open'});
     shadowRoot.appendChild(clone);
 
     // Grab the HTML elements we need to refer to later.
