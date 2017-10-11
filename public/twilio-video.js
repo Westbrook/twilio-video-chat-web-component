@@ -6,8 +6,6 @@ class TwilioVideoPrototype extends HTMLElement {
     });
   }
 
-  // Initialise an access manager with the token, then initialise a conversation
-  // client using that access manager and listen for incoming invites.
   connectToRoom(data) {
     var roomName = this.getAttribute('room-name') || 'test';
     console.log('Joining room "' + roomName + '"...');
@@ -34,10 +32,10 @@ class TwilioVideoPrototype extends HTMLElement {
 
   addRoomListeners(room) {
     // Attach the Tracks of the Room's Participants.
-    room.participants.forEach(function(participant) {
+    room.participants.forEach((participant) => {
       console.log('Already in Room: "' + participant.identity + '"');
       this.attachParticipantTracks(participant, this.caller);
-    }.bind(this));
+    });
 
     // When a Participant joins the Room, log the event.
     room.on('participantConnected', function(participant) {
@@ -45,32 +43,31 @@ class TwilioVideoPrototype extends HTMLElement {
     });
 
     // When a Participant adds a Track, attach it to the DOM.
-    room.on('trackAdded', function(track, participant) {
+    room.on('trackAdded', (track, participant) => {
       console.log(participant.identity + ' added track: ' + track.kind);
       this.attachTracks([track], this.caller);
-    }.bind(this));
+    });
 
     // When a Participant removes a Track, detach it from the DOM.
-    room.on('trackRemoved', function(track, participant) {
+    room.on('trackRemoved', (track, participant) => {
       console.log(participant.identity + ' removed track: ' + track.kind);
       this.detachTracks([track]);
-    }.bind(this));
+    });
 
     // When a Participant leaves the Room, detach its Tracks.
-    room.on('participantDisconnected', function(participant) {
+    room.on('participantDisconnected', (participant) => {
       console.log('Participant "' + participant.identity + '" left the room');
       this.detachParticipantTracks(participant);
-    }.bind(this));
+    });
 
     // Once the LocalParticipant leaves the room, detach the Tracks
     // of all Participants, including that of the LocalParticipant.
-    room.on('disconnected', function() {
+    room.on('disconnected', _ => {
       console.log('Left');
       this.detachParticipantTracks(room.localParticipant);
-      room.participants.forEach(this.detachParticipantTracks.bind(this));
+      room.participants.forEach(tracks => this.detachParticipantTracks(tracks));
       this.activeRoom = null;
-    }.bind(this));
-    // this.conversationsClient.on('invite', this.inviteReceived.bind(this));
+    });
 
     return room;
   }
@@ -138,14 +135,13 @@ class TwilioVideoPrototype extends HTMLElement {
     this.leave.classList.add('hidden');
     // hangup is a button that can be used to end conversations
     this.enter = shadowRoot.getElementById('enter');
-    this.enter.addEventListener('click', this.enterRoom.bind(this));
-    this.leave.addEventListener('click', this.disconnect.bind(this));
+    this.enter.addEventListener('click', _ => this.enterRoom());
+    this.leave.addEventListener('click', _ => this.disconnect());
   }
 
   enterRoom() {
     // Get the identity from the custom element's attribute
     var identity = this.getAttribute('identity') ||
-      generateRandomIdentity() ||
       'example';
 
     this.leave.classList.remove('hidden');
@@ -154,9 +150,9 @@ class TwilioVideoPrototype extends HTMLElement {
     // Start the process by fetching the token from the server and setting up
     // the conversation client.
     this.fetchToken(identity).
-      then(this.connectToRoom.bind(this)).
-      then(this.addParticipants.bind(this)).
-      then(this.addRoomListeners.bind(this)).
+      then(data => this.connectToRoom(data)).
+      then(room => this.addParticipants(room)).
+      then(room => this.addRoomListeners(room)).
       catch(function(err) {
         console.trace(err);
       });

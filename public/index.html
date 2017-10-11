@@ -31,5 +31,10 @@
       </div>
     </div>
   </div>
+  <script src="random-identity-generator.js"></script>
+  <script>
+    let videoChat = document.querySelector('twilio-video');
+    videoChat.setAttribute('identity', generateRandomIdentity());
+  </script>
 </body>
 </html>
