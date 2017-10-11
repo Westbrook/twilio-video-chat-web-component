@@ -163,7 +163,6 @@ class TwilioVideoPrototype extends HTMLElement {
   // conversation client from listening for incoming invites.
   disconnectedCallback () {
     this.disconnect();
-    this.conversationsClient.unlisten();
   }
 };
 window.customElements.define('twilio-video', TwilioVideoPrototype);
